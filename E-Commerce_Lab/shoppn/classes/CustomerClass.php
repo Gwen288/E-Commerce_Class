@@ -67,4 +67,49 @@ class CustomerClass extends Database
 
         return false;
     }
+
+public function getCustomerByEmail($email){
+
+    $sql="Select * from customer where customer_email= ?";
+
+    $stmt= $this->conn->prepare($sql);
+
+    $stmt->bind_param("s",$email);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1){
+         return $result->fetch_assoc();
+        
+    }
+
+    return false;
+}
+
+
+
+public function login($email,$pass){
+
+    $customer= $this->getCustomerByEmail($email);
+
+    if($customer === false){
+        return false;
+    }
+
+    if(password_verify($pass,$customer["customer_pass"])){
+        return $customer;
+    }
+
+    return false;
+
+
+}
+
+
+
+
+
+
 }
