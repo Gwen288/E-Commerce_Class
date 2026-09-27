@@ -68,6 +68,29 @@ class CustomerClass extends Database
         return false;
     }
 
+
+public function getCustomerById($customerId)
+{
+    $sql = "SELECT *
+            FROM customer
+            WHERE customer_id = ?";
+
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->bind_param("i", $customerId);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) {
+        return $result->fetch_assoc();
+    }
+
+    return false;
+}
+
+
 public function getCustomerByEmail($email){
 
     $sql="Select * from customer where customer_email= ?";
@@ -108,8 +131,98 @@ public function login($email,$pass){
 }
 
 
+public function updateCustomer(
+    $customerId,
+    $name,
+    $email,
+    $country,
+    $city,
+    $contact
+) {
+    $sql = "UPDATE customer
+            SET customer_name = ?,
+                customer_email = ?,
+                customer_country = ?,
+                customer_city = ?,
+                customer_contact = ?
+            WHERE customer_id = ?";
+
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->bind_param(
+        "sssssi",
+        $name,
+        $email,
+        $country,
+        $city,
+        $contact,
+        $customerId
+    );
+
+    if ($stmt->execute()) {
+        return true;
+    }
+
+    return false;
+}
 
 
+public function changePassword($customerId, $currentPassword, $newPassword)
+{
+    $sql = "SELECT customer_pass
+            FROM customer
+            WHERE customer_id = ?";
 
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->bind_param("i", $customerId);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if ($result->num_rows !== 1) {
+        return false;
+    }
+
+    $customer = $result->fetch_assoc();
+
+    // Check the current password
+    if (!password_verify($currentPassword, $customer['customer_pass'])) {
+        return false;
+    }
+
+    // Hash the new password
+    $hashedPassword = password_hash(
+        $newPassword,
+        PASSWORD_BCRYPT
+    );
+
+    $sql = "UPDATE customer
+            SET customer_pass = ?
+            WHERE customer_id = ?";
+
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->bind_param(
+        "si",
+        $hashedPassword,
+        $customerId
+    );
+
+    return $stmt->execute();
+}
+
+
+public function deleteCustomer($customerId){
+
+    $sql= "Delete from customer where customer_id= ?";
+
+    $stmt= $this->conn->prepare($sql);
+
+    $stmt->bind_param("i",$customerId);
+
+    return $stmt->execute();
+}
 
 }
