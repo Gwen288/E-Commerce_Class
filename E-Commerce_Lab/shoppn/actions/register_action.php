@@ -55,9 +55,11 @@ $result = $controller->register($data);
 // Registration successful
 if ($result['success']) {
     $_SESSION['customer_id'] = $result['customer_id'];
+    $_SESSION['customer_name'] = $name;
+    $_SESSION['customer_email'] = $email;
     $_SESSION['user_role'] = $result['user_role'];
 
-    redirect('../views/account/my_account.php');
+    redirect(BASE_URL . "views/account/my_account.php");
     exit;
 }
 
