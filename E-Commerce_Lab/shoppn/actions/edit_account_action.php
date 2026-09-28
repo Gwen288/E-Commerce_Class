@@ -88,6 +88,8 @@ if ($updated) {
 
     $_SESSION['customer_email'] = $email;
 
+    $_SESSION['success'] = 'Account has been successfully updated.';
+
     redirect(BASE_URL . 'views/account/my_account.php');
 }
 
