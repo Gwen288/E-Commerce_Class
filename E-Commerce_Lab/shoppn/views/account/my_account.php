@@ -11,6 +11,22 @@ require_login();
 
 <main>
 
+<?php if (isset($_SESSION['success'])): ?> 
+    <div class="success-message"> 
+        <?php echo htmlspecialchars($_SESSION['success']); ?>
+     </div> 
+
+     <?php unset($_SESSION['success']); ?> 
+     <?php endif; ?> 
+
+     <?php if (isset($_SESSION['error'])): ?> 
+        <div class="error-message"> 
+            <?php echo htmlspecialchars($_SESSION['error']); ?> 
+        </div> 
+
+        <?php unset($_SESSION['error']); ?> 
+        <?php endif; ?>
+
     <h1>My Account</h1>
 
     <div class="account-card">
@@ -29,10 +45,6 @@ require_login();
                 <?php echo htmlspecialchars($_SESSION['customer_email']); ?>
             </p>
 
-            <p>
-                <strong>Customer ID:</strong>
-                <?php echo htmlspecialchars($_SESSION['customer_id']); ?>
-            </p>
 
         </div>
 
