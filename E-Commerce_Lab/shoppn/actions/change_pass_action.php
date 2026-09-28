@@ -51,6 +51,22 @@ if ($currentPassword === $newPassword) {
 }
 
 
+// Check new password strength
+if (
+    strlen($newPassword) < 8 ||
+    !preg_match('/[a-z]/', $newPassword) ||
+    !preg_match('/[A-Z]/', $newPassword) ||
+    !preg_match('/[0-9]/', $newPassword) ||
+    !preg_match('/[^A-Za-z0-9]/', $newPassword)
+) {
+
+    $_SESSION['error'] =
+        'Password must be at least 8 characters and include uppercase and lowercase letters, a number, and a special character (e.g., !, @, #, $).';
+
+    redirect(BASE_URL . 'views/account/change_pass.php');
+}
+
+
 // Change the password
 $controller = new CustomerController();
 
@@ -63,7 +79,8 @@ $changed = $controller->changePassword(
 
 if ($changed) {
 
-    $_SESSION['success'] = 'Your password has been changed successfully.';
+    $_SESSION['success'] =
+        'Your password has been changed successfully.';
 
     redirect(BASE_URL . 'views/account/change_pass.php');
 }
