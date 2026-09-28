@@ -28,7 +28,7 @@
     <?php endif; ?>
 
 
-    <h1>Welcome to ShopPN</h1>
+    <h1>Welcome to Shoppn</h1>
 
     <p>Home page coming soon.</p>
 
