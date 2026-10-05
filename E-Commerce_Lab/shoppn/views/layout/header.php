@@ -1,4 +1,3 @@
-
 <?php
 // core.php should already be loaded before this header
 ?>
@@ -13,7 +12,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>ShopPN</title>
-    <link rel="stylesheet"  href="<?php echo BASE_URL; ?>css/style.css">
+
+    <link
+        rel="stylesheet"
+        href="<?php echo BASE_URL; ?>css/style.css"
+    >
 
 </head>
 
@@ -27,6 +30,7 @@
             Shoppn
         </a>
 
+
         <a href="<?php echo BASE_URL; ?>index.php">
             Home
         </a>
@@ -39,9 +43,25 @@
                 <?php echo htmlspecialchars($_SESSION['customer_name']); ?>
             </span>
 
+
             <a href="<?php echo BASE_URL; ?>views/account/my_account.php">
                 My Account
             </a>
+
+
+            <?php if (is_admin()): ?>
+
+                <a href="<?php echo BASE_URL; ?>views/admin/brand.php">
+                    Brands
+                </a>
+
+                <a href="<?php echo BASE_URL; ?>views/admin/category.php">
+                    Categories
+                </a>
+
+
+            <?php endif; ?>
+
 
             <a href="<?php echo BASE_URL; ?>logout.php">
                 Logout
@@ -53,6 +73,7 @@
             <a href="<?php echo BASE_URL; ?>views/register.php">
                 Register
             </a>
+
 
             <a href="<?php echo BASE_URL; ?>views/login.php">
                 Login
