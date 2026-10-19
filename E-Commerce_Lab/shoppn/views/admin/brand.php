@@ -10,9 +10,6 @@ $controller = new ProductController();
 $editId = $_GET['edit_id'] ?? null;
 $editBrand = false;
 
-/*
- * Check whether the page is in edit mode.
- */
 if ($editId !== null) {
 
     if (
@@ -33,21 +30,24 @@ if ($editId !== null) {
     }
 }
 
-/*
- * Get all brands for the table.
- */
 $brands = $controller->getAllBrands();
 
 require_once __DIR__ . '/../layout/header.php';
 ?>
 
-<main>
+<main class="admin-page">
 
-    <h1>Manage Brands</h1>
+    <div class="admin-page-header">
+        <div>
+            <h1>Manage Brands</h1>
+            <p>View, add, edit, and delete product brands.</p>
+        </div>
+    </div>
+
 
     <?php if (isset($_SESSION['success'])): ?>
 
-        <div class="success-message">
+        <div class="admin-message admin-success">
             <?php echo htmlspecialchars($_SESSION['success']); ?>
         </div>
 
@@ -58,7 +58,7 @@ require_once __DIR__ . '/../layout/header.php';
 
     <?php if (isset($_SESSION['error'])): ?>
 
-        <div class="error-message">
+        <div class="admin-message admin-error">
             <?php echo htmlspecialchars($_SESSION['error']); ?>
         </div>
 
@@ -67,128 +67,201 @@ require_once __DIR__ . '/../layout/header.php';
     <?php endif; ?>
 
 
-    <?php if ($editBrand !== false): ?>
+    <section class="admin-card">
 
-        <!-- EDIT MODE -->
+        <?php if ($editBrand !== false): ?>
 
-        <h2>Edit Brand</h2>
+            <div class="admin-card-header">
+                <h2>Edit Brand</h2>
+                <p>Update the selected brand.</p>
+            </div>
 
-        <form
-            action="<?php echo BASE_URL; ?>actions/update_brand_action.php"
-            method="POST"
-        >
-
-            <input
-                type="hidden"
-                name="brand_id"
-                value="<?php echo htmlspecialchars($editBrand['brand_id']); ?>"
+            <form
+                action="<?php echo BASE_URL; ?>actions/update_brand_action.php"
+                method="POST"
+                class="admin-form"
             >
 
-            <label for="brand_name">
-                Brand Name
-            </label>
+                <input
+                    type="hidden"
+                    name="brand_id"
+                    value="<?php echo (int)$editBrand['brand_id']; ?>"
+                >
 
-            <input
-                type="text"
-                id="brand_name"
-                name="brand_name"
-                value="<?php echo htmlspecialchars($editBrand['brand_name']); ?>"
-                required
+                <div class="form-group">
+
+                    <label for="brand_name">
+                        Brand Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="brand_name"
+                        name="brand_name"
+                        value="<?php echo htmlspecialchars($editBrand['brand_name']); ?>"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        class="admin-btn admin-btn-primary"
+                    >
+                        Update Brand
+                    </button>
+
+                    <a
+                        href="<?php echo BASE_URL; ?>views/admin/brand.php"
+                        class="admin-btn admin-btn-secondary"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        <?php else: ?>
+
+            <div class="admin-card-header">
+                <h2>Add Brand</h2>
+                <p>Add a new product brand.</p>
+            </div>
+
+            <form
+                action="<?php echo BASE_URL; ?>actions/add_brand_action.php"
+                method="POST"
+                class="admin-form"
             >
 
-            <button type="submit">
-                Update Brand
-            </button>
+                <div class="form-group">
 
-            <a href="<?php echo BASE_URL; ?>views/admin/brand.php">
-                Cancel
-            </a>
+                    <label for="brand_name">
+                        Brand Name
+                    </label>
 
-        </form>
+                    <input
+                        type="text"
+                        id="brand_name"
+                        name="brand_name"
+                        placeholder="Enter brand name"
+                        required
+                    >
 
-    <?php else: ?>
+                </div>
 
-        <!-- ADD MODE -->
+                <div class="form-actions">
 
-        <h2>Add Brand</h2>
+                    <button
+                        type="submit"
+                        class="admin-btn admin-btn-primary"
+                    >
+                        Add Brand
+                    </button>
 
-        <form
-            action="<?php echo BASE_URL; ?>actions/add_brand_action.php"
-            method="POST"
-        >
+                </div>
 
-            <label for="brand_name">
-                Brand Name
-            </label>
+            </form>
 
-            <input
-                type="text"
-                id="brand_name"
-                name="brand_name"
-                required
-            >
+        <?php endif; ?>
 
-            <button type="submit">
-                Add Brand
-            </button>
-
-        </form>
-
-    <?php endif; ?>
+    </section>
 
 
-    <h2>Existing Brands</h2>
+    <section class="admin-card">
 
-    <?php if (count($brands) > 0): ?>
+        <div class="admin-card-header">
+            <h2>Existing Brands</h2>
+            <p>Manage the brands currently in the system.</p>
+        </div>
 
-        <table>
+        <?php if (count($brands) > 0): ?>
 
-            <thead>
+            <div class="admin-table-container">
 
-                <tr>
-                    <th>Brand ID</th>
-                    <th>Brand Name</th>
-                    <th>Action</th>
-                </tr>
+                <table class="admin-table">
 
-            </thead>
+                    <thead>
 
-            <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <th>Brand Name</th>
+                            <th>Actions</th>
+                        </tr>
 
-                <?php foreach ($brands as $brand): ?>
+                    </thead>
 
-                    <tr>
+                    <tbody>
 
-                        <td>
-                            <?php echo htmlspecialchars($brand['brand_id']); ?>
-                        </td>
+                        <?php foreach ($brands as $brand): ?>
 
-                        <td>
-                            <?php echo htmlspecialchars($brand['brand_name']); ?>
-                        </td>
+                            <tr>
 
-                        <td>
+                                <td>
+                                    <?php echo (int)$brand['brand_id']; ?>
+                                </td>
 
-                            <a
-                                href="<?php echo BASE_URL; ?>views/admin/brand.php?edit_id=<?php echo (int)$brand['brand_id']; ?>"
-                            >
-                                Edit
-                            </a>
+                                <td>
+                                    <?php echo htmlspecialchars($brand['brand_name']); ?>
+                                </td>
 
-                        </td>
+                                <td>
 
-                    </tr>
+                                    <div class="admin-actions">
 
-                <?php endforeach; ?>
+                                        <a
+                                            href="<?php echo BASE_URL; ?>views/admin/brand.php?edit_id=<?php echo (int)$brand['brand_id']; ?>"
+                                            class="admin-btn admin-btn-edit"
+                                        >
+                                            Edit
+                                        </a>
 
-            </tbody>
+                                        <form
+                                            action="<?php echo BASE_URL; ?>actions/delete_brand_action.php"
+                                            method="POST"
+                                            onsubmit="return confirm('Are you sure you want to delete this brand?');"
+                                        >
 
-        </table>
+                                            <input
+                                                type="hidden"
+                                                name="brand_id"
+                                                value="<?php echo (int)$brand['brand_id']; ?>"
+                                            >
 
-    <?php else: ?>
+                                            <button
+                                                type="submit"
+                                                class="admin-btn admin-btn-danger"
+                                            >
+                                                Delete
+                                            </button>
 
-        <p>No brands have been added yet.</p>
+                                        </form>
 
-    <?php endif; ?>
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        <?php endforeach; ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        <?php else: ?>
+
+            <div class="admin-empty">
+                <p>No brands have been added yet.</p>
+            </div>
+
+        <?php endif; ?>
+
+    </section>
 
 </main>
