@@ -1,4 +1,3 @@
-```php
 <?php
 
 require_once __DIR__ . '/../../core/core.php';
@@ -79,4 +78,4 @@ require_login();
 </main>
 
 <?php require_once __DIR__ . '/../layout/footer.php'; ?>
-```
+
