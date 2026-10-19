@@ -76,11 +76,6 @@ require_once __DIR__ . "/layout/header.php";
              <button type="submit" id="registerButton" > Create Account </button>
 
              </form> 
-            </main>
-
-
-             <script src="../js/validate.js"></script> 
-             
-             
+            </main>            
     <?php require_once __DIR__ . '/layout/footer.php'; ?>
 
